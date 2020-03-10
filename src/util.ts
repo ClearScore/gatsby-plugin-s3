@@ -16,11 +16,11 @@ const oldRegions: string[] = [
 
 // Inspired by Terraform implementation:
 // https://git.io/fjr2Q
-export const getS3WebsiteDomainUrl = (region: string): string => {
+export const getS3WebsiteDomainUrl = (region: string, market: string): string => {
     // New regions uses different syntax for website endpoints
     // http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteEndpoints.html
     if (oldRegions.includes(region)) {
-        return `s3-website-${region}.amazonaws.com`;
+        return `s3-website-${region}.amazonaws.com/${market}`;
     }
-    return `s3-website.${region}.amazonaws.com`;
+    return `s3-website.${region}.amazonaws.com/${market}`;
 };

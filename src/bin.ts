@@ -105,9 +105,10 @@ const createSafeS3Key = (key: string): string => {
     return key;
 };
 
-const deploy = async ({ yes, bucket }: { yes: boolean; bucket: string }) => {
+const deploy = async ({ yes, bucket, market }: { yes: boolean; bucket: string; market: string }) => {
     const spinner = ora({ text: 'Retrieving bucket info...', color: 'magenta', stream: process.stdout }).start();
     let dontPrompt = yes;
+    if (!market) throw Error('You need to pass a market in your deploy gatsby config');
 
     const uploadQueue: Array<AsyncFunction<void, Error>> = [];
 
@@ -343,7 +344,7 @@ const deploy = async ({ yes, bucket }: { yes: boolean; bucket: string }) => {
 
         spinner.succeed('Synced.');
         if (config.enableS3StaticWebsiteHosting) {
-            const s3WebsiteDomain = getS3WebsiteDomainUrl(region ?? 'us-east-1');
+            const s3WebsiteDomain = getS3WebsiteDomainUrl(region ?? 'us-east-1', market);
             console.log(chalk`
             {bold Your website is online at:}
             {blue.underline http://${config.bucketName}.${s3WebsiteDomain}}
